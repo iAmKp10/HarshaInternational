@@ -3,10 +3,11 @@
 interface Props {
   type: 'h1' | 'h2' | 'h3' | 'h4' | 'base' | 'lg' | 'regular' | 'sm' | 'xs' | 'subtitle'
   class?: string,
-  style?: {}
+  style?: {},
+  id: string
 }
 
-const { type = 'base', class: className, style = {}, ...props } = Astro.props
+const { type = 'base', class: className, style = {}, id, ...props } = Astro.props
 
 ---
 
@@ -110,6 +111,7 @@ const { type = 'base', class: className, style = {}, ...props } = Astro.props
       className
     ]}
     style={style}
+    id={id}
     {...props}
   >
     <slot />
@@ -122,6 +124,7 @@ const { type = 'base', class: className, style = {}, ...props } = Astro.props
       "text-[15px] font-display font-[400] max-md:text-[13px] tracking-[-0.45px]", 
       className
     ]}
+    id={id}
     style={style}
     {...props}
   >

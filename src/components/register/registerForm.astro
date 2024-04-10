@@ -117,10 +117,14 @@ console.log("apiReponse -->", JSON.stringify(apiResponse.branches, null, 2))
             'Nursery',
             'LKG',
             'UKG',
+            'Grade 1',
+            // 'Grade 11',
           ]}
           name={"grade"}
           required
         />
+
+        <Text type="xs" class="text-sm leading -mt-[10px] hidden text-red-500" id="grade-6-requirement">*Min. age of 6 years required as on 1st April 2024</Text>
 
 
   
@@ -196,6 +200,34 @@ console.log("apiReponse -->", JSON.stringify(apiResponse.branches, null, 2))
   
 
   let loading = false
+
+  const selectGradeEl = document.querySelector('[data-select-parent-id="grade"] select');
+  
+  const selectGradeOptions = document.querySelectorAll('[data-select-parent-id="grade"] [data-value]');
+
+  const grade6Requirement = document.querySelector('#grade-6-requirement')
+
+  const onGradeChange = (grade) => {
+    if (grade6Requirement) {
+      console.log('grade -->', grade )
+      if (grade === 'Grade 1') {
+        grade6Requirement.classList.remove('hidden')
+      } else {
+        grade6Requirement.classList.add('hidden')
+      }
+    }
+  }
+
+  selectGradeEl.addEventListener('change', (e) => {
+    onGradeChange(e.target.value)
+  })
+
+  selectGradeOptions.forEach((option) => {
+    option.addEventListener('click', (e) => {
+      onGradeChange(option.innerText)
+    })
+  })
+
   
   
    const registerForm = document.getElementById('register-form')
@@ -261,21 +293,4 @@ console.log("apiReponse -->", JSON.stringify(apiResponse.branches, null, 2))
       }
     })
 
-    let params = (new URL(document.location)).searchParams;
-
-    const campusName = params.get('campus') || '';
-    const selectedCampus = campuses[campusName] || null
-
-
-    if (!!selectedCampus) {
-      updateGradesOptions(selectedCampus)
-    }
-
-
-    tippy(`[data-select-parent-id="selectDisabled"]`, {
-      content: '<span class="text-sm">Before choosing a grade, please select a campus.</span>',
-      allowHTML: true,
-      placement: 'bottom',
-      arrow: true,
-    });
 </script>
