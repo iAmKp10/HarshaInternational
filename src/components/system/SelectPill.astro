@@ -9,13 +9,15 @@ const {
   required = false,
   title=null
 } = Astro.props
+
+const flatArray = (arr) => arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flatArray(val) : val), []);
 ---
 
 <div class:list={["select text-[14px] h-[48px] relative", className, disabled && 'opacity-80']} data-select-parent-id={id}>
   <div class="selectWrapper">
     <select class="selectNative js-selectNative h-[48px]" aria-labelledby={name} name={name} data-id={id} required={required} title={title}>
       <option value="" disabled="" selected="">{placeholder}</option>
-      {options.map((option: string) => (
+      {flatArray(options).map((option: string) => (
         <option value={option}>
           {option}
         </option>
@@ -25,11 +27,17 @@ const {
     <!-- Hide the custom select from AT (e.g. SR) using aria-hidden -->
     <div class="selectCustom js-selectCustom" aria-hidden="true" data-id={id}>
       <div class="selectCustom-trigger">{placeholder}</div>
-      <div class="selectCustom-options flex flex-row flex-wrap gap-5 !px-6 justify-between">
-        {options.map((option: string) => (
-          <div data-value={option} class="selectCustom-option flex items-center justify-center flex-1 min-w-[100px] !p-2 !px-2 border border-[#C6C6C6] rounded-md cursor-pointer transition-all" >
-            {option}
-          </div> 
+      <div class="selectCustom-options min-w-[80px] !px-6 flex flex-col gap-5">
+        {options.map((optionRow) => (
+          <div class="flex flex-row flex-wrap gap-5 w-full justify-between">
+            {
+              optionRow.map((option) => (
+                <div data-value={option} class="selectCustom-option flex items-center text-center justify-center flex-1 min-w-[100px] !p-2 !px-2 border border-[#C6C6C6] rounded-md cursor-pointer transition-all" >
+                  {option}
+                </div> 
+              ))
+            }
+          </div>
         ))}
       </div>
     </div>
